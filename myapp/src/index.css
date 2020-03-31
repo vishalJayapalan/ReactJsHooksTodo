@@ -1,0 +1,103 @@
+body {
+  background-color: lightgray;
+  margin: 0;
+  padding: 0;
+}
+nav {
+  background-color: slategray;
+  display: flex;
+  justify-content: space-between;
+}
+.newInputList {
+  margin-top: 10px;
+  margin-left: 25%;
+  width: 50%;
+}
+.listContainer {
+  display: flex;
+  flex-wrap: wrap;
+}
+.individualList {
+  margin: 10px;
+}
+
+.tasksInList {
+  border-style: inset;
+  background-color: rgb(160, 175, 197);
+  border-radius: 5px;
+  height: 125px;
+  width: 125px;
+  padding: 10px;
+  overflow: hidden;
+  font-size: 60%;
+}
+.taskInList {
+  margin: 0;
+}
+.fas:hover {
+  font-size: 110%;
+}
+.listName {
+  display: inline;
+}
+.individualTask {
+  background-color: honeydew;
+  margin-left: 25%;
+  margin-bottom: 10px;
+  width: 50%;
+}
+.taskName {
+  display: inline;
+}
+.taskInput {
+  width: 40%;
+  margin-left: 30%;
+  margin-bottom: 10px;
+}
+.fa-angle-down {
+  float: right;
+  margin: 2%;
+}
+.showListName {
+  margin-left: 45%;
+}
+/* taskFeatures */
+.taskFeatures {
+  display: grid;
+  margin: 10px;
+  padding-bottom: 10px;
+  grid-column-gap: 10px;
+}
+.notes {
+  grid-column: 1/2;
+  grid-row: 1/2;
+}
+.dueDate {
+  grid-column: 2/3;
+  grid-row: 1/2;
+}
+.textNotes {
+  grid-column: 1/2;
+  grid-row: 2/10;
+  resize: none;
+}
+.date {
+  grid-column: 2/3;
+  grid-row: 2/3;
+}
+.priority {
+  grid-row: 3/4;
+  grid-column: 2/3;
+}
+.prioritySelect {
+  grid-row: 4/5;
+  grid-column: 2/3;
+}
+.dltBtn {
+  grid-row: 9/10;
+  grid-column: 2/3;
+  background-color: red;
+  color: white;
+  justify-self: center;
+  margin: 10px;
+}
