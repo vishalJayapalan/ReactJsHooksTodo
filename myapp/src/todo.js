@@ -2,19 +2,6 @@ import React, { useState, useEffect } from 'react'
 import List from './list'
 import Task from './task'
 
-// class Todo extends React.Component {
-//   constructor (props) {
-//     super(props)
-//     this.state = {
-//       inTask: null,
-//       listId: 2,
-//       taskId: 3,
-//       lists: [],
-//       listInput: false
-//     }
-//     // this.handleUpdateInput = this.handleUpdateInput.bind(this)
-//   }
-
 function Todo (props) {
   const [lists, setList] = useState([])
   const [inTask, setInTask] = useState(null)
@@ -174,11 +161,12 @@ function Todo (props) {
     listOrTask = (
       <List
         lists={lists}
-        handleDelete={listId => handleDeleteList(listId)}
+        // handleDelete={listId => handleDeleteList(listId)}
+        handleDelete={handleDeleteList}
         handleCreate={e => handleCreateList(e)}
         handleUpdate={(e, listId) => handleUpdateList(e, listId)}
         // handleUpdateInput={e => handleUpdateInput(e)}
-        handleOpenTask={e => openTask(e)}
+        handleOpenTask={openTask}
       />
     )
   } else {
