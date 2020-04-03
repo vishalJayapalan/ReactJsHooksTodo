@@ -1,17 +1,14 @@
-import React,{useState} from 'react'
+import React from 'react'
 
-// class IndividualList extends React.Component {
-//   constructor (props) {
-//     super(props)
-//     this.state = {
-//       inputToggle: false
-//     }
-//   }
+class IndividualList extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      inputToggle: false
+    }
+  }
 
-  // render () {
-function IndividualList(props){
-const [inputToggle,setInputToggle] = [false]
-
+  render () {
     let nameToggle
     if (this.state.inputToggle) {
       nameToggle = (

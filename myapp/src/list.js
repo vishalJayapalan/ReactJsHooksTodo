@@ -8,8 +8,7 @@ import IndividualList from './individualList'
 //       listInput: false
 //     }
 //   }
-
-function List (props) {
+export default function List (props) {
   const [listInput, setListInput] = useState(false)
 
   function listShower (list) {
@@ -24,7 +23,6 @@ function List (props) {
       />
     )
   }
-  console.log(props)
   let button
   if (listInput) {
     button = (
@@ -36,7 +34,7 @@ function List (props) {
         onKeyUp={e => {
           if (e.target.value && e.keyCode === 13) {
             setListInput(false)
-            props.handleCreate(e)
+            return props.handleCreate(e)
           }
         }}
       />
@@ -45,7 +43,10 @@ function List (props) {
   return (
     <div className='listPage'>
       <nav className='listNav'>
-        <button className='createListBtn' onClick={setListInput(!listInput)}>
+        <button
+          className='createListBtn'
+          onClick={() => setListInput(!listInput)}
+        >
           CreateList
         </button>
         <button className='searchListBtn'>Search</button>
@@ -59,5 +60,3 @@ function List (props) {
     </div>
   )
 }
-
-export default List

@@ -3,24 +3,26 @@ import List from './list'
 import Task from './task'
 
 function Todo (props) {
-  const [lists, setList] = useState([])
+  const [lists, setLists] = useState([])
   const [inTask, setInTask] = useState(null)
 
   useEffect(() => {
-    async function componentDidMount () {
-      const data = await window.fetch('http://localhost:5000/list', {
-        method: 'get'
-      })
-      const jsonData = await data.json()
-      setList(jsonData) // shit
-    }
-    componentDidMount()
-  })
-
+    fetchList()
+  }, [])
+  async function fetchList () {
+    console.log('inFetchList')
+    const data = await window.fetch('http://localhost:5000/list', {
+      method: 'get'
+    })
+    const jsonData = await data.json()
+    setLists(jsonData)
+    console.log(lists)
+  }
   function handleDeleteList (listId) {
     // listId
+    console.log('inDeleteList')
     const list = lists.filter(a => a._id != listId)
-    setList(list) // shit
+    setLists(list)
     window.fetch(`http://localhost:5000/list/${listId}/`, {
       method: 'DELETE',
       headers: {
@@ -30,6 +32,7 @@ function Todo (props) {
   }
 
   async function handleCreateList (event) {
+    console.log('inCreateLIst')
     const listName = event.target.value
     // console.log(listName)
     const response = await window.fetch('http://localhost:5000/list/', {
@@ -41,26 +44,27 @@ function Todo (props) {
     })
     const jsonData = await response.json()
     const listId = jsonData.listId
-    setList([
+    setLists([
       ...lists,
       {
         _id: listId,
         listName: listName,
         tasks: []
       }
-    ]) // shit
+    ])
     // event.target.value = ''
   }
 
   function handleUpdateList (event, listId) {
+    console.log('inHandleUpdateList')
     const listName = event.target.value
-    const listsUpdate = lists.map(list => {
+    const newLists = lists.map(list => {
       if (list._id == listId) {
         list.listName = listName
       }
       return list
     })
-    setList(listsUpdate) //shit
+    setLists(newLists)
     window.fetch(`http://localhost:5000/list/${listId}/`, {
       method: 'PUT',
       body: JSON.stringify({ listName: listName }),
@@ -71,15 +75,17 @@ function Todo (props) {
   }
 
   function openTask (listId) {
-    setList(listId) // shit
+    console.log('inOpenTask')
+    setInTask(listId)
   }
 
   function handleBack () {
-    setInTask(null) // have to handle this
+    setInTask(null)
   }
 
   async function handleCreateTask (event) {
-    const _id = inTask // have to handle this
+    console.log('inCreateTask')
+    const _id = inTask
     const taskName = event.target.value
     event.target.value = ''
     const response = await window.fetch(`http://localhost:5000/task/${_id}`, {
@@ -91,10 +97,10 @@ function Todo (props) {
     })
     const jsonData = await response.json()
     const taskId = jsonData.taskId
-    const listsUpdated = lists
-    for (const list of lists) {
+    // console.log(taskId)
+    const newLists = lists
+    for (const list of newLists) {
       if (list._id == inTask) {
-        // have to handle this
         list.tasks.push({
           taskId,
           taskName,
@@ -106,19 +112,20 @@ function Todo (props) {
         })
       }
     }
-    setList(listsUpdated) // have to handle this
+    setLists(newLists)
+    console.log('inCreateList after creating ', lists)
+    // this.setState({ taskId, lists }) check again
   }
 
   function handleDeleteTask (_id, taskId) {
-    const listsUpdated = lists
-    const list = lists.find(l => {
-      return l._id == _id
-    })
+    console.log('inDeleteTask')
+    const newLists = lists
+    const list = newLists.find(l => l._id == _id)
     const listIndex = lists.findIndex(l => l._id == _id)
     list.tasks = list.tasks.filter(t => t.taskId != taskId)
-    listsUpdated[listIndex] = list
+    newLists[listIndex] = list
 
-    setList(listsUpdated) // shit
+    setLists(lists)
     window.fetch(`http://localhost:5000/task/${_id}/${taskId}`, {
       method: 'DELETE',
       headers: {
@@ -128,20 +135,25 @@ function Todo (props) {
   }
 
   function handleUpdateTask (e, name, task) {
+    console.log('inUpdateTask')
+    const value = e.target.value
     const listId = task.listId
     const taskId = task.taskId
-    const listsUpdated = lists.slice()
-    const listIndex = lists.findIndex(l => l._id === listId)
+    // console.log(task)
+    const newLists = lists
+    // const list = this.state.lists.find(l => l._id === listId)
+    const listIndex = newLists.findIndex(l => l._id === listId)
     const list = lists[listIndex]
     list.tasks = list.tasks.map(t => {
       if (t.taskId === taskId) {
-        t[name] = e.target.value
+        t[name] = value
       }
       return t
     })
-    listsUpdated[listIndex] = list
-    setList(listsUpdated) // shit
-    console.log(task)
+    newLists[listIndex] = list
+    // console.log(lists)
+    setLists(lists)
+    // console.log(task)
     window.fetch(`http://localhost:5000/task/${listId}/${taskId}`, {
       method: 'PUT',
       body: JSON.stringify({ task }),
@@ -157,39 +169,40 @@ function Todo (props) {
 
   let listOrTask
   if (inTask === null) {
-    // should be handled
+    console.log(lists)
     listOrTask = (
       <List
         lists={lists}
-        // handleDelete={listId => handleDeleteList(listId)}
-        handleDelete={handleDeleteList}
+        // listInput={this.state.listInput}
+        handleDelete={listId => handleDeleteList(listId)}
         handleCreate={e => handleCreateList(e)}
         handleUpdate={(e, listId) => handleUpdateList(e, listId)}
         // handleUpdateInput={e => handleUpdateInput(e)}
-        handleOpenTask={openTask}
+        handleOpenTask={e => openTask(e)}
       />
     )
   } else {
     let count
     let listName
-    const list = lists.slice()
+    const list = lists
     for (let i = 0; i < list.length; i++) {
       if (lists[i]._id == inTask) {
-        // should handle this
         listName = lists[i].listName
         count = i
         break
       }
     }
+    console.log(count)
+    console.log(lists)
     listOrTask = (
       <Task
         tasks={lists[count].tasks}
         listName={listName}
-        handleBack={() => handleBack()}
-        handleCreateTask={e => handleCreateTask(e)}
-        deleteTask={(listId, taskId) => handleDeleteTask(listId, taskId)}
-        updateTask={(e, name, task) => handleUpdateTask(e, name, task)}
-        updateTaskChecked={e => handleUpdateTaskChecked(e)}
+        handleBack={handleBack}
+        handleCreateTask={handleCreateTask}
+        deleteTask={handleDeleteTask}
+        updateTask={handleUpdateTask}
+        updateTaskChecked={handleUpdateTaskChecked}
       />
     )
   }
