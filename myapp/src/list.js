@@ -1,13 +1,6 @@
 import React, { useState } from 'react'
 import IndividualList from './individualList'
 
-// export default class List extends React.Component {
-//   constructor (props) {
-//     super(props)
-//     this.state = {
-//       listInput: false
-//     }
-//   }
 export default function List (props) {
   const [listInput, setListInput] = useState(false)
 

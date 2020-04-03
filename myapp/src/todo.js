@@ -174,11 +174,11 @@ function Todo (props) {
       <List
         lists={lists}
         // listInput={this.state.listInput}
-        handleDelete={listId => handleDeleteList(listId)}
-        handleCreate={e => handleCreateList(e)}
-        handleUpdate={(e, listId) => handleUpdateList(e, listId)}
+        handleDelete={handleDeleteList}
+        handleCreate={handleCreateList}
+        handleUpdate={handleUpdateList}
         // handleUpdateInput={e => handleUpdateInput(e)}
-        handleOpenTask={e => openTask(e)}
+        handleOpenTask={openTask}
       />
     )
   } else {
