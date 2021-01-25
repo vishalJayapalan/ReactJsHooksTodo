@@ -1,5 +1,5 @@
 const List = require('../models/lists.model')
-const mongoose = require('mongoose')
+// const mongoose = require('mongoose')
 
 const getAllTasks = (req, res) => {
   List.findById(req.params._id)
@@ -7,16 +7,19 @@ const getAllTasks = (req, res) => {
     .catch(err => res.status(400).json('Error: ' + err))
 }
 
-const createNewTask = (req, res) => {
+const createNewTask = async (req, res) => {
   const task = req.body
-  task.taskId = new mongoose.Types.ObjectId()
-  List.findById(req.params._id).then(list => {
+  task.listId = req.params._id
+  try {
+    const list = await List.findById(req.params._id)
     list.tasks.push(task)
-    list
-      .save()
-      .then(() => res.json({ taskId: task.taskId }))
-      .catch(err => res.status(400).json('Error: ' + err))
-  })
+    await list.save()
+    return res.json({ taskId: list.tasks[list.tasks.length - 1]._id })
+  } catch (err) {
+    res.status(500).json({
+      error: err
+    })
+  }
 }
 
 const updateTask = (req, res) => {
@@ -31,7 +34,7 @@ const updateTask = (req, res) => {
 
 const deleteTask = (req, res) => {
   List.findById(req.params._id).then(list => {
-    const index = list.tasks.findIndex(task => task.taskId == req.params.taskId)
+    const index = list.tasks.findIndex(task => task._id == req.params.taskId)
     if (index === -1) {
       return res.status(404).json({
         type: 'Error',
@@ -42,14 +45,27 @@ const deleteTask = (req, res) => {
     list.tasks.splice(index, 1)
     list
       .save()
-      .then(() => res.json(`task deleted! ${list}`))
+      .then(() => res.json({ list: list }))
       .catch(err => res.status(400).json('Error: ' + err))
   })
+}
+
+const clearCompletedTasks = async (req, res) => {
+  try {
+    const list = await List.findById(req.params.listId)
+    const tasks = list.tasks.filter(task => !task.checked)
+    list.tasks = tasks
+    await list.save()
+    res.json('completedTasksDeleted!')
+  } catch (err) {
+    res.status(400).json('Error: ' + err)
+  }
 }
 
 module.exports = {
   getAllTasks,
   createNewTask,
   updateTask,
-  deleteTask
+  deleteTask,
+  clearCompletedTasks
 }

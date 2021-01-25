@@ -101,3 +101,9 @@ nav {
   justify-self: center;
   margin: 10px;
 }
+
+.taskNameInput{
+  background-color: inherit;
+  border: none;
+  outline: none;
+}

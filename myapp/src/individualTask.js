@@ -3,48 +3,41 @@ import TaskFeatures from './taskFeatures'
 
 export default function IndividualTask (props) {
   const [showTaskFeatures, setShowTaskFeatures] = useState(false)
-  const [inputToggle, setInputToggle] = useState(false)
 
-  let nameToggle
-  if (inputToggle) {
-    nameToggle = (
-      <input
-        autoFocus
-        className='taskNameInput'
-        type='text'
-        defaultValue={props.task.taskName}
-        onKeyUp={e => {
-          if (e.keyCode === 13 && e.target.value) {
-            setInputToggle(false)
-            props.updateTask(e, 'taskName', this.props.task)
-          }
-        }}
-        onBlur={() => this.setInputToggle(false)}
-        // event,listId
-      />
-    )
-  } else {
-    nameToggle = (
-      <p className='taskName' onClick={() => this.setInputToggle(true)}>
-        {props.task.taskName}
-      </p>
-    )
-  }
   return (
     <div className='individualTask'>
       <div className='task'>
         <input
           className='done'
           type='checkbox'
-          onChange={e => props.updateTaskChecked(e)}
+          checked={props.task.checked}
+          onChange={e => props.updateTask(e, props.task)}
         />
-        {nameToggle}
+        <input
+          autoFocus
+          className='taskNameInput'
+          type='text'
+          defaultValue={props.task.taskName}
+          onBlur={e => {
+            props.updateTask(e, props.task, 'taskName')
+          }}
+        />
         <i
           className='fas fa-angle-down'
           onClick={() => setShowTaskFeatures(!showTaskFeatures)}
         />
       </div>
-      <hr />
+      <hr
+        className={`${
+          props.task.priority == 3
+            ? 'red'
+            : props.task.priority == 2
+            ? 'orange'
+            : props.task.priority == 1
+            ? 'green'
+            : ''
+        }`}
+      />
       {showTaskFeatures && (
         <TaskFeatures
           task={props.task}

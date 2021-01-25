@@ -1,13 +1,5 @@
 import React, { useState } from 'react'
 
-// class IndividualList extends React.Component {
-//   constructor (props) {
-//     super(props)
-//     this.state = {
-//       inputToggle: false
-//     }
-//   }
-
 export default function IndividualList (props) {
   const [inputToggle, setInputToggle] = useState(false)
   let nameToggle
@@ -25,7 +17,6 @@ export default function IndividualList (props) {
           }
         }}
         onBlur={() => setInputToggle(false)}
-        // event,listId
       />
     )
   } else {
@@ -42,7 +33,7 @@ export default function IndividualList (props) {
         onClick={() => props.onOpenTask(props.list._id)}
       >
         {props.list.tasks.map(task => (
-          <p key={task.taskId} className='taskInList'>
+          <p key={task._id} className='taskInList'>
             {task.taskName}
           </p>
         ))}

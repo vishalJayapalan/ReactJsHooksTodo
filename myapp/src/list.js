@@ -4,18 +4,6 @@ import IndividualList from './individualList'
 export default function List (props) {
   const [listInput, setListInput] = useState(false)
 
-  function listShower (list) {
-    return (
-      <IndividualList
-        key={list._id}
-        list={list}
-        onHandleUpdate={props.handleUpdate}
-        onHandleUpdateInput={props.handleUpdateInput}
-        onHandleDelete={props.handleDelete}
-        onOpenTask={props.handleOpenTask}
-      />
-    )
-  }
   let button
   if (listInput) {
     button = (
@@ -47,7 +35,15 @@ export default function List (props) {
       {button}
       <div className='listContainer'>
         {props.lists.map(list => {
-          return listShower(list)
+          return (
+            <IndividualList
+              key={list._id}
+              list={list}
+              onHandleUpdate={props.handleUpdate}
+              onHandleDelete={props.handleDelete}
+              onOpenTask={props.handleOpenTask}
+            />
+          )
         })}
       </div>
     </div>

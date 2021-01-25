@@ -11,9 +11,6 @@ Router.put('/:_id/:taskId', taskController.updateTask)
 
 Router.delete('/:_id/:taskId', taskController.deleteTask)
 
-// Router.delete(
-//   '/:listId/clearCompletedTasks/',
-//   taskController.clearCompletedTasks
-// )
+Router.delete('/:listId', taskController.clearCompletedTasks)
 
 module.exports = Router
